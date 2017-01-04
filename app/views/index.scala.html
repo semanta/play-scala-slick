@@ -1,0 +1,100 @@
+@(userForm: Form[model.UserFormData],users : Seq[model.User],columns : Seq[model.Column],WebJarAssets: WebJarAssets)(implicit request: RequestHeader)
+@main() {
+
+@users.head.value
+<p id="demo">semanta</p>
+<form  class="userForm" action='@routes.ApplicationController.addUser()' method="post" enctype="application/json">
+    @for(column <- columns){
+    @column.value
+    @if(column.value == "no") {
+    <input type="number" name="number"><br>
+    } else {
+    <input type="text" name="@column.value"><br>
+    }
+    }
+    <input type="submit" value="Submit">
+</form>
+
+<div class="user-display" >
+    <fieldset>
+        <legend align="center"><h3>Registered Users</h3></legend>
+        <table cellspacing="20">
+            <tr>
+                <th>userid</th>
+                <th>value</th>
+            </tr>
+            @for(user <- users){
+            <tr>
+                <td>@user.id</td>
+                <td>@user.value</td>
+                <td><a href="@routes.ApplicationController.deleteUser(user.id)">delete</a></td>
+            </tr>
+            }
+        </table>
+    </fieldset>
+</div>
+
+<!--<form id="user-data-form" role="form" action='@routes.ApplicationController.addUser()' method="post" class="form-horizontal" align="center" autocomplete="off">-->
+
+    <!--<fieldset class="user-fieldset">-->
+
+        <!--<div class="user-form">-->
+            <!--<label class="form-title" style="color: #F8741B; font-size: 22px;font-weight: bold; text-decoration:none">Add person</label>-->
+        <!--</div>-->
+        <!--<br/>-->
+        <!--<table align="center" cellspacing="20">-->
+            <!--<tr>-->
+                <!--<td align="left">-->
+                    <!--<div class="user-form" id="firstName_field_label">-->
+                        <!--<div class="controls col-xs-offset-3 col-xs-9">-->
+                            <!--<div class="input-group">-->
+                                <!--<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>-->
+                                <!--<strong>value</strong> :-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</td>-->
+                <!--<td align="center">-->
+                    <!--<div class="user-form" id="firstName_field_value">-->
+                        <!--<div class="controls col-xs-offset-3 col-xs-9">-->
+                            <!--<div class="input-group">-->
+                                <!--<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>-->
+                                <!--<input type="text" id="value" name="value" value="" placeholder="value" class="form-control input-lg" required>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</td>-->
+            <!--</tr>-->
+
+
+        <!--</table>-->
+        <!--<br/>-->
+        <!--<div class="form-actions controls ynt-btn-xlarge">-->
+            <!--<button type="submit" class="btn btn-primary ynt-btn-orange">Add</button>-->
+        <!--</div>-->
+
+    <!--</fieldset>-->
+<!--</form>-->
+
+<!--<script type="text/javascript">-->
+<!--var myJSON = '{ "name":"John", "age":31, "city":"New York" }';-->
+<!--var myObj = JSON.parse(myJSON);-->
+<!--document.getElementById("demo").innerHTML = myObj.name;-->
+<!--</script>-->
+
+<script type='text/javascript'>
+var formData = JSON.stringify($("#myForm").serializeArray());
+</script>
+<script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.fullPath("react", "react.js"))'></script>
+<script type='text/javascript' src='@routes.Assets.versioned("javascripts/myReact.js")'></script>
+<script type='text/javascript'>
+function handleJson(text)
+{
+var myJSON = '{ "name":"John", "age":31, "city":"New York" }';
+var myObj = JSON.parse(text);
+alert(myObj)
+document.getElementById("demo").innerHTML = myObj.number;
+}
+handleJson('@users.head.value')
+</script>
+}
